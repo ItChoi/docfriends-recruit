@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RequiredArgsConstructor
 @RestController
 public class MemberController {
@@ -33,8 +35,8 @@ public class MemberController {
     }
 
     @PostMapping("/member/login")
-    public ResponseEntity<String> login(@RequestBody MemberRequestDto memberRequestDto) {
-        String message = memberService.login(memberRequestDto);
+    public ResponseEntity<String> login(@RequestBody MemberRequestDto memberRequestDto, HttpServletRequest request) {
+        String message = memberService.login(memberRequestDto, request);
 
         return new ResponseEntity<>(message, HttpStatus.OK);
     }

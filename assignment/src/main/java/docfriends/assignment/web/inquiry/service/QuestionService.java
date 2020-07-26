@@ -1,6 +1,6 @@
 package docfriends.assignment.web.inquiry.service;
 
-import docfriends.assignment.web.hashtag.domain.HashTag;
+import docfriends.assignment.common.Utils;
 import docfriends.assignment.web.hashtag.repository.HashTagRepository;
 import docfriends.assignment.web.inquiry.domain.Question;
 import docfriends.assignment.web.inquiry.repository.QuestionRepository;
@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,8 +35,11 @@ public class QuestionService {
     }
 
     @Transactional
-    public QuestionResponseDto save(QuestionRequestDto questionRequestDto) {
+    public QuestionResponseDto save(QuestionRequestDto questionRequestDto, HttpServletRequest request) {
         questionRequestDto.setAnswerStatus("N");
+        Long memberId = (Long) Utils.getMemberIdFromSession();
+        questionRequestDto.setMemberId(memberId);
+
         Question question = modelMapper.map(questionRequestDto, Question.class);
         question.changeHashTag();
         questionRepository.save(question);
